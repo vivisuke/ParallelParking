@@ -24,6 +24,9 @@ func initCar():
 	car_angle = 0
 func updateCarPos():
 	$Panel/PosLabel.text = "Pos: (%.2f, %.2f)" % [$Car.position.x, $Car.position.y]
+	var x : int = int($Car.position.x - 32) / 16
+	var y : int = int($Car.position.y - 32) / 16
+	$Panel/PosLabel.text += ", ix = %d" % (y*16+x)
 
 func _ready():
 	rng.randomize()
