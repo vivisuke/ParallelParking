@@ -8,8 +8,10 @@ const ANGLE_MIN = -45		# 最小車角度（左に切った場合）
 var car_angle = 0.0				# 車向き（上向き）
 var velocity = 0.0				# 車速度
 
-
+func updateCarPos():
+	$Panel/PosLabel.text = "Pos: (%.2f, %.2f)" % [$Car.position.x, $Car.position.y]
 func _ready():
+	updateCarPos()
 	pass # Replace with function body.
 	
 func _physics_process(delta):
@@ -25,8 +27,11 @@ func _physics_process(delta):
 			car_angle = clamp(car_angle + ANGLE_UNIT, ANGLE_MIN, ANGLE_MAX)
 		else:
 			return
-		$Car.rotation = car_angle
+		$Panel/AngleLabel.text = "Angle: %d" % car_angle
+		$Car.rotation = car_angle * PI / 180
 		return
 	if velocity != 0.0:
 		var vx = velocity * sin(car_angle * PI / 180)
-		var vy = velocity * cos(car_angle * PI / 180)
+		var vy = -velocity * cos(car_angle * PI / 180)
+		$Car.position += Vector2(vx, vy)
+		updateCarPos()
