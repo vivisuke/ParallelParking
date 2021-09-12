@@ -13,6 +13,8 @@ enum {
 }
 const ALPHA = 0.1
 const GAMMA = 0.1
+const EPSILON = 0.05			# この確率でランダム行動
+const REWARD_COLLIDE = -1.0
 const INIT_POS = Vector2(32*6.5, 32*4)
 const VELOCITY_UNIT = 500		# 速度単位
 const ANGLE_UNIT = 5		# 車角度単位
@@ -90,7 +92,22 @@ func _physics_process(delta):
 	var act = -1
 	if started:
 		velocity = 0
-		act = rng.randi_range(FORWARD, RIGHT)
+		if qix0 < 0 || rng.randf_range(0, 1.0) < EPSILON:		# ランダムウォーク
+			act = rng.randi_range(FORWARD, RIGHT)
+		else:
+			var mx = REWARD_COLLIDE - 1
+			var lst = []
+			for i in range(Q[qix0].size()):
+				if Q[qix0][i] != REWARD_COLLIDE:
+					if Q[qix0][i] > mx:
+						mx = Q[qix0][i]
+						lst = [i]
+					elif Q[qix0][i] == mx:
+						lst.push_back(i)
+			if lst.size() > 1:
+				act = lst[rng.randi_range(0, lst.size() - 1)]
+			else:
+				act = lst[0]
 		match act:
 			FORWARD:
 				velocity = VELOCITY_UNIT
@@ -140,7 +157,7 @@ func _physics_process(delta):
 		updateCarAngleLabel()
 		#print(lst)
 		if lst != null:
-			reward = -1.0
+			reward = REWARD_COLLIDE
 			print("collided.")
 			started = false
 		elif is_on_the_goal():
