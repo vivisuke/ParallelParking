@@ -78,11 +78,23 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="RoundLabel" type="Label" parent="Panel"]
+margin_left = 16.0
+margin_top = 66.3794
+margin_right = 106.0
+margin_bottom = 90.3794
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Round #0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="PosLabel" type="Label" parent="Panel"]
-margin_left = 13.3635
-margin_top = 10.6908
-margin_right = 96.3635
-margin_bottom = 34.6908
+margin_left = 16.0
+margin_top = 111.685
+margin_right = 99.0
+margin_bottom = 135.685
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Pos: 0, 0"
@@ -92,9 +104,9 @@ __meta__ = {
 
 [node name="DirLabel" type="Label" parent="Panel"]
 margin_left = 16.0362
-margin_top = 34.6908
+margin_top = 135.685
 margin_right = 133.036
-margin_bottom = 58.6908
+margin_bottom = 159.685
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Dir: Straight"
@@ -103,10 +115,10 @@ __meta__ = {
 }
 
 [node name="QValLabel" type="Label" parent="Panel"]
-margin_left = 16.0362
-margin_top = 208.467
-margin_right = 99.0362
-margin_bottom = 232.467
+margin_left = 16.0
+margin_top = 200.675
+margin_right = 99.0
+margin_bottom = 224.675
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "QVal: 0"
@@ -115,10 +127,10 @@ __meta__ = {
 }
 
 [node name="AngleLabel" type="Label" parent="Panel"]
-margin_left = 13.3635
-margin_top = 58.6908
-margin_right = 150.364
-margin_bottom = 82.6908
+margin_left = 16.0362
+margin_top = 159.685
+margin_right = 153.037
+margin_bottom = 183.685
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Angle: 0.0 deg"
@@ -127,18 +139,26 @@ __meta__ = {
 }
 
 [node name="StartButton" type="Button" parent="Panel"]
-margin_left = 13.3635
-margin_top = 121.997
-margin_right = 71.3635
-margin_bottom = 151.997
+margin_left = 162.475
+margin_top = 15.3389
+margin_right = 220.475
+margin_bottom = 45.3391
 custom_fonts/font = SubResource( 2 )
 text = "Start"
 
+[node name="100RoundButton" type="Button" parent="Panel"]
+margin_left = 16.0
+margin_top = 15.0
+margin_right = 133.0
+margin_bottom = 45.0
+custom_fonts/font = SubResource( 2 )
+text = "100Round"
+
 [node name="InitButton" type="Button" parent="Panel"]
-margin_left = 96.3635
-margin_top = 121.997
-margin_right = 154.363
-margin_bottom = 151.997
+margin_left = 248.327
+margin_top = 15.3389
+margin_right = 306.327
+margin_bottom = 45.3391
 custom_fonts/font = SubResource( 2 )
 text = "Init"
 __meta__ = {
@@ -169,4 +189,5 @@ position = Vector2( 96, 336 )
 texture = ExtResource( 6 )
 
 [connection signal="pressed" from="Panel/StartButton" to="." method="_on_StartButton_pressed"]
+[connection signal="pressed" from="Panel/100RoundButton" to="." method="_on_100RoundButton_pressed"]
 [connection signal="pressed" from="Panel/InitButton" to="." method="_on_InitButton_pressed"]

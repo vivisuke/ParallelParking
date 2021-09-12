@@ -29,6 +29,8 @@ const N_ANGLE : int = ANGLE_MAX - ANGLE_MIN + 1			# [-20, +110]
 const N_STEERING = 3		# -1, 0, 1
 const N_STATE : int = N_CELL_HORZ * N_CELL_VERT * N_STEERING * N_ANGLE			# 状態数
 
+var nRound = 0
+var nRoundRemain = 0		# 残りラウンド数
 var started = false
 var car_angle = 0.0				# 車向き（0：上向き）
 var velocity = 0.0				# 車速度
@@ -65,7 +67,7 @@ func updateQValLabel():
 	else:
 		var txt = "Q[%d] = [\n" % qix
 		for i in range(Q[qix].size()):
-			txt += "    %.3f,\n" % Q[qix][i]
+			txt += "    %.4f,\n" % Q[qix][i]
 		$Panel/QValLabel.text = txt + "]"
 			
 func _ready():
@@ -83,7 +85,7 @@ func is_on_the_goal():
 	return $TileMap.get_cellv(xy) == TILE_GOAL
 func _physics_process(delta):
 	var qix0 = calcQIX()
-	#var colided = false
+	#var collided = false
 	var reward = 0			# 報酬
 	var act = -1
 	if started:
@@ -139,7 +141,7 @@ func _physics_process(delta):
 		#print(lst)
 		if lst != null:
 			reward = -1.0
-			print("colided.")
+			print("collided.")
 			started = false
 		elif is_on_the_goal():
 			reward = 0.5
@@ -151,14 +153,24 @@ func _physics_process(delta):
 		var qix = calcQIX()
 		if qix != qix0:
 			var maxQ = 0
-			if qix < 0: reward = -1		# 車角度範囲外などの場合
-			elif reward == 0: reward = 0.01		# 長くさまようのはマイナス報酬
+			if qix < 0:
+				reward = -1		# 車角度範囲外などの場合
+				started = false
+			elif reward == 0: reward = -0.01		# 長くさまようのはマイナス報酬
 			if qix >= 0:
 				maxQ = Q[qix].max()
 			Q[qix0][act] += ALPHA * (reward * GAMMA + maxQ - Q[qix0][act])
-func _on_StartButton_pressed():
+			print("Q[%d][%d] = %.4f" % [qix0, act, Q[qix0][act]])
+	if !started && nRoundRemain > 0:
+		nRoundRemain -= 1
+		doStart()
+func doStart():
 	initCar()
 	started = true;
+	nRound += 1
+	$Panel/RoundLabel.text = "Round: #%d" % nRound
+func _on_StartButton_pressed():
+	if !started: doStart()
 	pass # Replace with function body.
 
 
@@ -167,4 +179,11 @@ func _on_InitButton_pressed():
 	updateCarPosLabel()
 	updateDirLabel()
 	updateQValLabel()
+	pass # Replace with function body.
+
+
+func _on_100RoundButton_pressed():
+	if !nRoundRemain:
+		nRoundRemain = 100
+		doStart()
 	pass # Replace with function body.
